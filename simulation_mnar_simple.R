@@ -1,11 +1,10 @@
-suppressMessages({
+
 library(data.table)
 library(magrittr)
 library(ggplot2)
 library(snowfall)
-# source('code/utils.R')
-# source('code/estimators.R')
-})
+source('utils.R')
+source('estimators.R')
 
 sims_n <- 100
 increment <- 0.05
@@ -24,19 +23,13 @@ p_x=0.5
 o_a=-0.2 
 x_o=0.2 
 x_a=0.1
-  
-
 impacts_t_o <- seq(0, max_impact_t_o, increment)
 
-capture.output({
-  suppressMessages({
-    sfInit(parallel = parallel, cpus = 10, slaveOutfile=log_file)
-    sfExportAll()
-    sfLibrary(data.table)
-    sfLibrary(magrittr)
-    invisible(sfLibrary(snowfall))
-  })
-}, file = nullfile())
+sfInit(parallel = parallel, cpus = 10, slaveOutfile=log_file)
+sfExportAll()
+sfLibrary(data.table)
+sfLibrary(magrittr)
+invisible(sfLibrary(snowfall))
 
 results_list <- sfLapply(impacts_t_o, function(impact_t_o){
   results <- data.table()
@@ -107,7 +100,7 @@ results_list <- sfLapply(impacts_t_o, function(impact_t_o){
   }
   return(results)
 })
-suppressMessages(sfStop())
+sfStop()
 
 do.call(rbind, results_list) %>%
   .[, .(
