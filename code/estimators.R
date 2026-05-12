@@ -58,16 +58,6 @@ rho <- function(
     ub <- ub * p_w_t
   }
   
-  if(!is.na(hat_p_o_t)){
-    if( hat_p_o_t > ub ){
-      hat_p_o_t <- ub
-    }else if( hat_p_o_t < lb ){
-      hat_p_o_t <- lb
-    }
-    ub <- hat_p_o_t
-    lb <- hat_p_o_t
-  }
-  
   return(list(
     value=hat_p_o_t,
     ub=ub,
